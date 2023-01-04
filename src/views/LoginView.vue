@@ -21,10 +21,10 @@
                     </div>
 
                     <div class="mt-8">
-                        <form>
+                        <form id="form-login" @submit="login">
                             <div>
                                 <label for="email" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Email</label>
-                                <input type="email" name="email" id="email" placeholder="example@example.com" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                                <input type="email" name="email" id="email" v-model="email" placeholder="example@example.com" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
                             </div>
 
                             <div class="mt-6">
@@ -33,11 +33,13 @@
                                     <a href="#" class="text-sm text-gray-400 focus:text-blue-500 hover:text-blue-500 hover:underline">Esqueceu sua senha?</a>
                                 </div>
 
-                                <input type="password" name="password" id="password" placeholder="Sua senha" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
+                                <input type="password" name="password" id="password" v-model="password" placeholder="Sua senha" class="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:placeholder-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:border-blue-400 dark:focus:border-blue-400 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40" />
                             </div>
 
                             <div class="mt-6">
+                               
                                 <button
+                                    type="submit"
                                     class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-400 focus:ring focus:ring-blue-300 focus:ring-opacity-50">
                                     Entrar
                                 </button>
@@ -55,7 +57,32 @@
 
 <script>
 export default {
-    name: "Login"
+    name: "Login",
+    data() {
+        return {
+            email: null,
+            password: null
+        }
+    },
+    methods: {
+        async login(e) {
+            e.preventDefault();
+            const data = {
+                email: this.email,
+                password: this.password
+            }
+           
+            const dataJson = JSON.stringify(data);
+            const req = await fetch('http://127.0.0.1:8000/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: dataJson,
+            });
+
+            const resp = await req.json();
+            console.log(resp);
+        } 
+    }
 }
 </script>
 
